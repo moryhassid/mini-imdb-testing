@@ -1,3 +1,4 @@
+
 <!-- TOC -->
   * [1. Using assert Statements](#1-using-assert-statements)
   * [Pytest](#pytest)
@@ -10,9 +11,10 @@
     * [What is decorator?](#what-is-decorator)
     * [What is marker?](#what-is-marker)
 * [Marking tests with custom markers](#marking-tests-with-custom-markers)
-    * [How to use fixtures?](#how-to-use-fixtures)
+    * [What are fixtures?](#what-are-fixtures)
+      * [Use case:](#use-case)
+      * 
 <!-- TOC -->
-
 ## 1. Using assert Statements
 
 Use assert during development to:
@@ -194,9 +196,11 @@ def test_slow_operation():
     time.sleep(2)
     assert True
 
+
 @pytest.mark.fast
 def test_fast_operation():
     assert 1 + 1 == 2
+
 
 @pytest.mark.database
 def test_database_query():
@@ -204,17 +208,94 @@ def test_database_query():
 ```
 
 In case we would like to run only the slow category we will write:
+
 ```bash
 pytest -m slow
 ```
 
 In case we would like to run either `slow` or `database` category we will write,
 to run multiple markers:
+
 ```bash
 pytest -m "slow or database"
 ```
-### How to use fixtures?
+
+### What are fixtures?
+
+A fixture in pytest is a **reusable piece of code** used to **set up a consistent test environment before running tests
+** and can also **help clean up after tests**. Fixtures are commonly used for tasks like **database setup**, **creating test data**,
+**initializing web drivers**, or **preparing mock objects**.
+
+#### Use case:
+
+Here we have 2 simple routes (`/add_movie`, `/get_movies`):
+
+```python
+# app.py
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+movies = []
 
 
+@app.route('/add_movie', methods=['POST'])
+def add_movie():
+    movie = request.json.get('title')
+    if movie:
+        movies.append(movie)
+        return jsonify({"message": "Movie added successfully!"}), 201
+    return jsonify({"error": "No movie provided"}), 400
 
 
+@app.route('/get_movies', methods=['GET'])
+def get_movies():
+    return jsonify({"movies": movies}), 200
+
+```
+
+Here we write the fixture (a reusable piece of code used to set up a consistent test environment
+before running tests and can also help clean up after tests)
+
+```python
+# conftest.py
+import pytest
+from app import app, movies
+
+
+@pytest.fixture
+def test_client():
+    """Fixture to create a test client and ensure a clean state."""
+    app.testing = True
+    client = app.test_client()
+    movies.clear()  # Clear movie list before each test
+    yield client
+```
+
+We can easily see for each tests (3 tests), we call the fixture function (`test_client`).
+
+```python
+# test_flask_app.py
+def test_add_movie(test_client):
+    """Test adding a valid movie."""
+    response = test_client.post('/add_movie', json={"title": "Inception"})
+    assert response.status_code == 201
+    assert b"Movie added successfully!" in response.data
+    assert "Inception" in movies
+
+
+def test_add_movie_no_title(test_client):
+    """Test adding a movie without a title."""
+    response = test_client.post('/add_movie', json={})
+    assert response.status_code == 400
+    assert b"No movie provided" in response.data
+
+
+def test_get_movies(test_client):
+    """Test retrieving movies."""
+    test_client.post('/add_movie', json={"title": "Inception"})
+    response = test_client.get('/get_movies')
+    assert response.status_code == 200
+    assert b"Inception" in response.data
+```
+
+This setup ensures a clean database for every test run
