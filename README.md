@@ -1,19 +1,21 @@
 <!-- TOC -->
 
-  * [1. Using assert Statements](#1-using-assert-statements)
-  * [Pytest](#pytest)
-  * [**How to run tests?**](#how-to-run-tests)
+* [1. Using assert Statements](#1-using-assert-statements)
+* [Pytest](#pytest)
+* [**How to run tests?**](#how-to-run-tests)
     * [Run tests in a module](#run-tests-in-a-module)
     * [Run tests in a directory](#run-tests-in-a-directory)
     * [Run tests by keyword expressions](#run-tests-by-keyword-expressions)
     * [What is Mock?](#what-is-mock)
-      * [When to use Mock?](#when-to-use-mock)
+        * [When to use Mock?](#when-to-use-mock)
     * [What is decorator?](#what-is-decorator)
     * [What is marker?](#what-is-marker)
 * [Marking tests with custom markers](#marking-tests-with-custom-markers)
     * [What are fixtures?](#what-are-fixtures)
-      * [Use case:](#use-case)
+        * [Use case:](#use-case)
+
 <!-- TOC -->
+
 ## 1. Using assert Statements
 
 Use assert during development to:
@@ -182,9 +184,10 @@ def test_get_user_data():
 A decorator in Python is a design pattern that allows you to extend or modify the behavior of a function or method
 without permanently modifying its structure.
 
-### What is marker?
+### What is marks?
 
-import pytest
+marks are used to categorize and selectively run tests. Marks help in organizing test cases based on criteria like
+functionality, speed, or priority.
 
 # Marking tests with custom markers
 
@@ -222,7 +225,8 @@ pytest -m "slow or database"
 ### What are fixtures?
 
 A fixture in pytest is a **reusable piece of code** used to **set up a consistent test environment before running tests
-** and can also **help clean up after tests**. Fixtures are commonly used for tasks like **database setup**, **creating test data**,
+** and can also **help clean up after tests**. Fixtures are commonly used for tasks like **database setup**, **creating
+test data**,
 **initializing web drivers**, or **preparing mock objects**.
 
 #### Use case:
