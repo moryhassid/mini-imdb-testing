@@ -1,18 +1,3 @@
-<!-- TOC -->
-
-* [1. Using assert Statements](#1-using-assert-statements)
-* [Pytest](#pytest)
-* [**How to run tests?**](#how-to-run-tests)
-    * [Run tests in a module](#run-tests-in-a-module)
-    * [Run tests in a directory](#run-tests-in-a-directory)
-    * [Run tests by keyword expressions](#run-tests-by-keyword-expressions)
-    * [What is Mock?](#what-is-mock)
-        * [When to use Mock?](#when-to-use-mock)
-    * [What is decorator?](#what-is-decorator)
-    * [How to use fixtures?](#how-to-use-fixtures)
-
-<!-- TOC -->
-
 ## 1. Using assert Statements
 
 Use assert during development to:
@@ -144,8 +129,77 @@ The use cases:
 4) When you want to test a component in **isolation without involving other parts of the system**.
 5) For simulating edge cases like **network failures or specific error responses**.
 
+Example for usecase:
+
+Invoking api (external service):
+
+```python
+def get_user_data(user_id):
+    response = requests.get(f"https://jsonplaceholder.typicode.com/users/{user_id}")
+    if response.status_code == 200:
+        return response.json()
+    return None
+```
+
+Here is the test, I'm using mock:
+
+```python
+def test_get_user_data():
+    # Create a mock response object
+    mock_response = Mock()
+    mock_response.status_code = 200
+    mock_response.json.return_value = {"name": "John Doe", "age": 30}
+
+    # Mock the requests.get call
+    requests.get = Mock(return_value=mock_response)
+
+    # Call the function under test
+    result = get_user_data(10)
+
+    # Assertions to verify behavior
+    assert result == {"name": "John Doe", "age": 30}
+    requests.get.assert_called_once_with("https://jsonplaceholder.typicode.com/users/10")
+```
+
 ### What is decorator?
 
+A decorator in Python is a design pattern that allows you to extend or modify the behavior of a function or method
+without permanently modifying its structure.
+
+### What is marker?
+
+import pytest
+
+# Marking tests with custom markers
+
+```python
+@pytest.mark.slow
+def test_slow_operation():
+    import time
+    time.sleep(2)
+    assert True
+
+@pytest.mark.fast
+def test_fast_operation():
+    assert 1 + 1 == 2
+
+@pytest.mark.database
+def test_database_query():
+    assert "data" in ["data", "test", "info"]
+```
+
+In case we would like to run only the slow category we will write:
+```bash
+pytest -m slow
+```
+
+In case we would like to run either `slow` or `database` category we will write,
+to run multiple markers:
+```bash
+pytest -m "slow or database"
+```
 ### How to use fixtures?
+
+
 
 
