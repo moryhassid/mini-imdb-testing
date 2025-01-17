@@ -1,19 +1,17 @@
 <!-- TOC -->
-
-* [1. Using assert Statements](#1-using-assert-statements)
-* [Pytest](#pytest)
-* [**How to run tests?**](#how-to-run-tests)
+  * [1. Using assert Statements](#1-using-assert-statements)
+  * [Pytest](#pytest)
+  * [**How to run tests?**](#how-to-run-tests)
     * [Run tests in a module](#run-tests-in-a-module)
     * [Run tests in a directory](#run-tests-in-a-directory)
     * [Run tests by keyword expressions](#run-tests-by-keyword-expressions)
     * [What is Mock?](#what-is-mock)
-        * [When to use Mock?](#when-to-use-mock)
+      * [When to use Mock?](#when-to-use-mock)
     * [What is decorator?](#what-is-decorator)
-    * [What is marker?](#what-is-marker)
-* [Marking tests with custom markers](#marking-tests-with-custom-markers)
+    * [What is marks?](#what-is-marks)
+      * [Marking tests with custom markers](#marking-tests-with-custom-markers)
     * [What are fixtures?](#what-are-fixtures)
-        * [Use case:](#use-case)
-
+      * [Use case:](#use-case)
 <!-- TOC -->
 
 ## 1. Using assert Statements
@@ -189,7 +187,7 @@ without permanently modifying its structure.
 marks are used to categorize and selectively run tests. Marks help in organizing test cases based on criteria like
 functionality, speed, or priority.
 
-# Marking tests with custom markers
+#### Marking tests with custom markers
 
 ```python
 @pytest.mark.slow
