@@ -1,3 +1,18 @@
+<!-- TOC -->
+  * [1. Using assert Statements](#1-using-assert-statements)
+  * [Pytest](#pytest)
+  * [**How to run tests?**](#how-to-run-tests)
+    * [Run tests in a module](#run-tests-in-a-module)
+    * [Run tests in a directory](#run-tests-in-a-directory)
+    * [Run tests by keyword expressions](#run-tests-by-keyword-expressions)
+    * [What is Mock?](#what-is-mock)
+      * [When to use Mock?](#when-to-use-mock)
+    * [What is decorator?](#what-is-decorator)
+    * [What is marker?](#what-is-marker)
+* [Marking tests with custom markers](#marking-tests-with-custom-markers)
+    * [How to use fixtures?](#how-to-use-fixtures)
+<!-- TOC -->
+
 ## 1. Using assert Statements
 
 Use assert during development to:
