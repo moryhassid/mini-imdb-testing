@@ -1,4 +1,3 @@
-
 <!-- TOC -->
   * [1. Using assert Statements](#1-using-assert-statements)
   * [Pytest](#pytest)
@@ -13,7 +12,6 @@
 * [Marking tests with custom markers](#marking-tests-with-custom-markers)
     * [What are fixtures?](#what-are-fixtures)
       * [Use case:](#use-case)
-      * 
 <!-- TOC -->
 ## 1. Using assert Statements
 
@@ -298,4 +296,4 @@ def test_get_movies(test_client):
     assert b"Inception" in response.data
 ```
 
-This setup ensures a clean database for every test run
+This setup ensures a clean database for every test run.
