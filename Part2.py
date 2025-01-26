@@ -77,7 +77,6 @@ class TestFlaskApp:
                 'Actor 4:': 'Mr Bean'
             }
 
-            # Find all input elements with type 'text'
             text_boxes = driver.find_elements(By.XPATH, "//input[@type='text']")
 
             for text_box in text_boxes:
