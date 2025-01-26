@@ -9,7 +9,7 @@ def client():
         yield client
 
 
-# For sharing fixtures among  multiple test files
+
 @pytest.fixture
 def init_db():
     conn = sqlite3.connect("test_movies.db")
@@ -39,7 +39,6 @@ def test_post_page(client):
     response = client.get('/post/')
     assert response.status_code == 200
 
-# Done
 def test_movie_detail_page(client, init_db):
     with sqlite3.connect("test_movies.db") as my_db:
         cur = my_db.cursor()
@@ -53,7 +52,6 @@ def test_movie_detail_page(client, init_db):
 
 
 def test_error_handling(client):
-    # Attempt to access a non-existent movie
     response = client.get('/movie/9999')  # Adjust ID to something that does not exist
     assert response.status_code == 500  # Expecting a 404 error for non-existent resources
 
@@ -75,7 +73,6 @@ def test_post_with_invalid_csrf(client):
 
 
 def test_xss_protection(client, init_db):
-    # Post a movie with XSS payload
     xss_payload = "<script>alert('XSS')</script>"
     response = client.post('/post/', data={
         'title': xss_payload,
@@ -88,9 +85,7 @@ def test_xss_protection(client, init_db):
         'actor3': 'actor3',
         'actor4': 'actor4'
     })
-    assert response.status_code == 500  # Adjust based on your application's behavior
-
-    # Retrieve and check if XSS payload is properly escaped
+    assert response.status_code == 500
     response = client.get('/movies/')
     assert b'&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;' not in response.data
 
@@ -105,7 +100,7 @@ def test_sql_injection(client, init_db):
         )
         my_db.commit()
     response = client.get("/movie/1 OR 1=1")
-    assert response.status_code == 404  # Should not be able to inject SQL
+    assert response.status_code == 404
 
 
 def test_xss_vulnerability(client, init_db):
@@ -126,9 +121,8 @@ def test_protected_route(client):
     response = client.get('/protected/')
     assert response.status_code == 404  # Redirect if not authenticated
 
-    # Test with valid authentication (example with a mock token or session)
     with client.session_transaction() as sess:
-        sess['user_id'] = 1  # Mocking authenticated user
+        sess['user_id'] = 1
 
     response = client.get('/protected/')
     assert response.status_code == 404
@@ -150,7 +144,6 @@ def test_view_movie(client, init_db):
         )
         my_db.commit()
 
-    # Retrieve movie details
     response = client.get('/movie/1')
     assert response.status_code == 500
     assert (b'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n<title>500 Inter'
@@ -179,9 +172,8 @@ def test_get_movie(client, init_db):
 
 
 def test_handle_invalid_movie_id(client, init_db):
-    # Attempt to view a movie with an invalid ID
     response = client.get('/movie/999')
-    assert response.status_code == 500  # Expect a 404 Not Found error
+    assert response.status_code == 500
     assert (b'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n<title>500 Inter'
             b'nal Server Error</title>\n<h1>Internal Server Error</h1>\n<p>The server en'
             b'countered an internal error and was unable to complete your request. Either '
@@ -229,7 +221,6 @@ def test_error_handling(client):
             b'e server. If you entered the URL manually please check your spelling and try'
             b' again.</p>\n')
 
-    # Test for internal server error (500)
     response = client.get('/trigger-error/')
     assert response.status_code == 404  # Expect a 500 Internal Server Error
     assert (b'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n<title>404 Not F'
@@ -237,7 +228,6 @@ def test_error_handling(client):
             b'e server. If you entered the URL manually please check your spelling and try'
             b' again.</p>\n')
 
-    # Optionally, you can test for other error types if applicable
 
 
 def test_user_can_see_movie_detail(client, init_db):
@@ -256,7 +246,6 @@ def test_user_can_see_movie_detail(client, init_db):
 
 
 def test_search_and_filter(client, init_db):
-    # Add movies to the database
     with sqlite3.connect("test_movies.db") as my_db:
         cur = my_db.cursor()
         cur.execute(
@@ -267,7 +256,6 @@ def test_search_and_filter(client, init_db):
             ('Search Test Movie 2', 'path2', 'Director2', 'Description2', 2023, 'Actor1', 'Actor2', 'Actor3', 'Actor4'))
         my_db.commit()
 
-    # Search for movies
     response = client.get('/search/', query_string={'title': 'Search Test Movie'})
     assert response.status_code == 404
     assert (b'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n<title>404 Not F'
