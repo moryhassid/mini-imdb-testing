@@ -32,7 +32,7 @@ def driver(request):
 
 @pytest.mark.usefixtures("driver")
 class TestFlaskApp:
-    # Done
+
     @pytest.mark.smoke
     def test_click_homepage(self, driver):
         driver.get('http://127.0.0.1:5000/')
@@ -45,7 +45,7 @@ class TestFlaskApp:
         except Exception as e:
             pytest.fail(f"Failed to click Homepage link: {e}")
 
-    # Done
+
     @pytest.mark.functional
     def test_click_new_movie(self, driver):
         driver.get('http://127.0.0.1:5000/')
