@@ -9,7 +9,6 @@ def client():
         yield client
 
 
-
 @pytest.fixture
 def init_db():
     conn = sqlite3.connect("test_movies.db")
@@ -38,6 +37,7 @@ def test_welcome_page(client):
 def test_post_page(client):
     response = client.get('/post/')
     assert response.status_code == 200
+
 
 def test_movie_detail_page(client, init_db):
     with sqlite3.connect("test_movies.db") as my_db:
@@ -117,7 +117,6 @@ def test_xss_vulnerability(client, init_db):
 
 
 def test_protected_route(client):
-    # Assuming you have some form of authentication
     response = client.get('/protected/')
     assert response.status_code == 404  # Redirect if not authenticated
 
@@ -227,7 +226,6 @@ def test_error_handling(client):
             b'ound</title>\n<h1>Not Found</h1>\n<p>The requested URL was not found on th'
             b'e server. If you entered the URL manually please check your spelling and try'
             b' again.</p>\n')
-
 
 
 def test_user_can_see_movie_detail(client, init_db):
