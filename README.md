@@ -86,6 +86,15 @@ class TestClassDemoInstance:
 pytest test_mod.py
 ```
 
+### Run tests in a module with Verbose
+
+The `-vv` flag in pytest stands for "very verbose" mode. It increases the verbosity of the test output, providing more detailed information about each test being run
+
+```shell
+pytest -vv test_mod.py
+```
+
+
 ### Run tests in a directory
 
 ```shell
