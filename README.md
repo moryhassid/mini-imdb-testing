@@ -3,6 +3,7 @@
   * [Pytest](#pytest)
   * [**How to run tests?**](#how-to-run-tests)
     * [Run tests in a module](#run-tests-in-a-module)
+    * [Run tests in a module with Verbose](#run-tests-in-a-module-with-verbose)
     * [Run tests in a directory](#run-tests-in-a-directory)
     * [Run tests by keyword expressions](#run-tests-by-keyword-expressions)
     * [What is Mock?](#what-is-mock)
